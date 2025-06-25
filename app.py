@@ -4,36 +4,18 @@ from datetime import datetime
 from functools import wraps
 import openpyxl
 from io import BytesIO
-import os
 
 app = Flask(__name__)
 app.secret_key = 'chave_secreta_segura'
 
-# Conexão com PostgreSQL (Render)
+# Conexão direta com PostgreSQL (sem variáveis de ambiente)
 def get_conn():
-    host = os.getenv("DB_HOST")
-    dbname = os.getenv("DB_NAME")
-    user = os.getenv("DB_USER")
-    password = os.getenv("DB_PASSWORD")
-    port = os.getenv("DB_PORT", 5432)
-
-    # DEBUG TEMPORÁRIO
-    print("=== DEBUG VARIÁVEIS ===")
-    print("HOST:", host)
-    print("DB:", dbname)
-    print("USER:", user)
-    print("PASS:", password)
-    print("=======================")
-
-    if not all([host, dbname, user, password]):
-        raise Exception("Erro: variáveis de ambiente do banco não estão configuradas corretamente.")
-
     return psycopg2.connect(
-        host=host,
-        database=dbname,
-        user=user,
-        password=password,
-        port=port
+        host="dpg-d1dm80jipnbc73deh3tg-a.oregon-postgres.render.com",
+        database="barbearia_wyjw",
+        user="barbearia_wyjw_user",
+        password="1yYiJaT7gTuXEoKDLThDI3EHXwuSROwL",
+        port=5432
     )
 
 def login_required(f):
