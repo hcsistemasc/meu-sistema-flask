@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Saída de Produtos - Barbearia do Zé</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+        <a class="navbar-brand" href="{{ url_for('dashboard') }}">Barbearia do Zé</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('estoque') }}">Estoque</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{{ url_for('saida') }}">Saída</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('relatorios') }}">Relatórios</a></li>
+                <li class="nav-item"><a class="nav-link text-danger" href="{{ url_for('logout') }}">Sair</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Conteúdo -->
+    <div class="container mt-5">
+        <h1 class="mb-4">Registrar Venda</h1>
+
+        <form method="POST" class="row g-3 mb-5">
+            <div class="col-md-3">
+                <label class="form-label">Produto</label>
+                <select name="produto" class="form-select" required>
+                    {% for p in produtos %}
+                        <option value="{{ p[0] }}">{{ p[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Quantidade</label>
+                <input type="number" name="quantidade" class="form-control" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Vendedor</label>
+                <input type="text" name="vendedor" class="form-control" required>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Desconto</label>
+                <select name="desconto" class="form-select">
+                    <option value="0">Sem desconto</option>
+                    <option value="5">5%</option>
+                    <option value="10">10%</option>
+                    <option value="15">15%</option>
+                    <option value="20">20%</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-success w-100">Registrar Venda</button>
+            </div>
+        </form>
+
+        <h3>Vendas Registradas</h3>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Vendedor</th>
+                    <th>Data</th>
+                    <th>Desconto</th>
+                    <th>Total</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in vendas %}
+                <tr>
+                    <td>{{ v[1] }}</td>
+                    <td>{{ v[2] }}</td>
+                    <td>{{ v[3] }}</td>
+                    <td>{{ v[4] }}</td>
+                    <td>
+                        {% if v[6] %}
+                            {{ (v[6] * 100)|round(0) }}%
+                        {% else %}
+                            0%
+                        {% endif %}
+                    </td>
+                    <td>R$ {{ '%.2f'|format(v[5]) }}</td>
+                    <td>
+                        <a href="{{ url_for('excluir_venda', id=v[0]) }}" class="btn btn-sm btn-danger" onclick="return confirm('Deseja excluir esta venda?');">Excluir</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

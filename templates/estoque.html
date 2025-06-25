@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Estoque - Barbearia do Zé</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <!-- Navbar fixa -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+        <a class="navbar-brand" href="{{ url_for('dashboard') }}">Barbearia do Zé</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('estoque') }}">Estoque</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('saida') }}">Saída</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('relatorios') }}">Relatórios</a></li>
+                <li class="nav-item"><a class="nav-link text-danger" href="{{ url_for('logout') }}">Sair</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Conteúdo -->
+    <div class="container mt-5">
+        <h1 class="mb-4">Gerenciar Estoque</h1>
+
+        <!-- Formulário de cadastro -->
+        <form method="POST" class="row g-3 mb-5">
+            <div class="col-md-4">
+                <label class="form-label">Nome do Produto</label>
+                <input type="text" class="form-control" name="nome" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Valor</label>
+                <input type="number" step="0.01" class="form-control" name="valor" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Quantidade</label>
+                <input type="number" class="form-control" name="quantidade" required>
+            </div>
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-success">Adicionar Produto</button>
+            </div>
+        </form>
+
+        <!-- Pesquisa -->
+        <div class="mb-3">
+            <input type="text" id="pesquisaProduto" class="form-control" placeholder="🔍 Pesquisar produto...">
+        </div>
+
+        <!-- Tabela de produtos -->
+        <h3>Produtos Cadastrados</h3>
+        <table class="table table-bordered table-hover" id="tabelaProdutos">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nome</th>
+                    <th>Valor</th>
+                    <th>Quantidade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in produtos %}
+                <tr>
+                    <td>{{ p[1] }}</td>
+                    <td>R$ {{ '%.2f'|format(p[2]) }}</td>
+                    <td>{{ p[3] }}</td>
+                    <td>
+                        <a href="{{ url_for('editar_produto', id=p[0]) }}" class="btn btn-sm btn-primary">Editar</a>
+                        <a href="{{ url_for('excluir_produto', id=p[0]) }}" class="btn btn-sm btn-danger" onclick="return confirm('Deseja excluir este produto?');">Excluir</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Script para filtrar produtos -->
+    <script>
+        document.getElementById('pesquisaProduto').addEventListener('keyup', function () {
+            var termo = this.value.toLowerCase();
+            var linhas = document.querySelectorAll('#tabelaProdutos tbody tr');
+
+            linhas.forEach(function (linha) {
+                var nome = linha.cells[0].textContent.toLowerCase();
+                linha.style.display = nome.includes(termo) ? '' : 'none';
+            });
+        });
+    </script>
+
+</body>
+</html>

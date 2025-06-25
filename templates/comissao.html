@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Comissão - Barbearia do Zé</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+        <a class="navbar-brand" href="{{ url_for('dashboard') }}">Barbearia do Zé</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('estoque') }}">Estoque</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('saida') }}">Saída</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('relatorios') }}">Relatórios</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{{ url_for('comissao') }}">Comissão</a></li>
+                <li class="nav-item"><a class="nav-link text-danger" href="{{ url_for('logout') }}">Sair</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Relatório de Comissões</h1>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Vendedor</th>
+                    <th>Total Vendido</th>
+                    <th>Comissão</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for linha in resultado %}
+                <tr>
+                    <td>{{ linha[0] }}</td>
+                    <td>R$ {{ '%.2f'|format(linha[1]) }}</td>
+                    <td>R$ {{ '%.2f'|format(linha[2]) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
