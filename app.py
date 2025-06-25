@@ -17,6 +17,14 @@ def get_conn():
     password = os.getenv("DB_PASSWORD")
     port = os.getenv("DB_PORT", 5432)
 
+    # DEBUG TEMPORÁRIO
+    print("=== DEBUG VARIÁVEIS ===")
+    print("HOST:", host)
+    print("DB:", dbname)
+    print("USER:", user)
+    print("PASS:", password)
+    print("=======================")
+
     if not all([host, dbname, user, password]):
         raise Exception("Erro: variáveis de ambiente do banco não estão configuradas corretamente.")
 
