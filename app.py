@@ -11,12 +11,21 @@ app.secret_key = 'chave_secreta_segura'
 
 # Conexão com PostgreSQL (Render)
 def get_conn():
+    host = os.getenv("DB_HOST")
+    dbname = os.getenv("DB_NAME")
+    user = os.getenv("DB_USER")
+    password = os.getenv("DB_PASSWORD")
+    port = os.getenv("DB_PORT", 5432)
+
+    if not all([host, dbname, user, password]):
+        raise Exception("Erro: variáveis de ambiente do banco não estão configuradas corretamente.")
+
     return psycopg2.connect(
-        host=os.getenv("DB_HOST", "seu_host_aqui"),
-        database=os.getenv("DB_NAME", "seu_db"),
-        user=os.getenv("DB_USER", "seu_user"),
-        password=os.getenv("DB_PASSWORD", "sua_senha"),
-        port=os.getenv("DB_PORT", 5432)
+        host=host,
+        database=dbname,
+        user=user,
+        password=password,
+        port=port
     )
 
 def login_required(f):
